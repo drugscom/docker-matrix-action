@@ -1,0 +1,34 @@
+{
+  "name": "docker-matrix-action",
+  "version": "1.0.0",
+  "description": "Generate job matrix for all Dockerfiles in the project",
+  "main": "src/main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://asenci@github.com/drugscom/docker-matrix-action.git"
+  },
+  "keywords": [
+    "actions",
+    "docker",
+    "matrix",
+    "dockerfile"
+  ],
+  "author": "Drugs.com",
+  "license": "UNLICENSED",
+  "bugs": {
+    "url": "https://github.com/drugscom/docker-matrix-action/issues"
+  },
+  "homepage": "https://github.com/drugscom/docker-matrix-action#readme",
+  "dependencies": {
+    "@actions/core": "^1.2.6",
+    "@actions/github": "^4.0.0",
+    "glob": "^7.1.6"
+  },
+  "private": true,
+  "devDependencies": {
+    "@vercel/ncc": "^0.27.0"
+  }
+}
