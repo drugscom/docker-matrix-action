@@ -30,7 +30,7 @@ try {
 
                 let cachePath = path.join(github.context.repo.owner, github.context.repo.repo, dockerFilePath);
                 let tags = [];
-                let tagPrefix = [github.context.repo.owner, github.context.repo.repo].join('/');
+                let tagPrefix = ['ghcr.io', github.context.repo.owner, github.context.repo.repo].join('/');
                 if (tagPrefixInput !== '') {
                     tagPrefix = tagPrefixInput;
                 }
