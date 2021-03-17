@@ -14,7 +14,7 @@ try {
     includes = [];
     jobMatrix = {'include': includes};
 
-    core.startGroup('Finding targets');
+    core.startGroup('Find targets');
     for (let line of paths.split('\n')) {
         for (let dir of line.split(',')) {
             let globPath = path.join(dir, 'Dockerfile');
