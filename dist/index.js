@@ -9124,13 +9124,14 @@ const github = __nccwpck_require__(5438);
 
 try {
     const paths = core.getInput('paths');
-    const latestBranch = core.getInput('latest-branch')
+    const latestBranch = core.getInput('latest-branch');
     const recursive = core.getInput('recursive');
-    const tagPrefixInput = core.getInput('tag-prefix')
+    const tagPrefixInput = core.getInput('tag-prefix');
 
     includes = [];
     jobMatrix = {'include': includes};
 
+    core.startGroup('Finding targets');
     for (let line of paths.split('\n')) {
         for (let dir of line.split(',')) {
             let globPath = path.join(dir, 'Dockerfile');
@@ -9140,8 +9141,10 @@ try {
 
             for (let dockerFile of glob.sync(globPath)) {
                 if (fs.lstatSync(dockerFile).isDirectory()) {
+                    core.info('Ignoring ' + dockerFile + ' (is a directory)');
                     continue;
                 }
+                core.info('Found ' + dockerFile);
 
                 let dockerFilePath = path.dirname(dockerFile);
 
@@ -9171,13 +9174,13 @@ try {
 
                         if (!label.match(/(?:b|beta)[0-9]+$/)) {
                             while (label.match(/\./)) {
-                                tags.push(label)
+                                tags.push(label);
                                 label = label.replace(/\.[^.]*$/, '');
                             }
                         }
                     }
 
-                    tags.push(label)
+                    tags.push(label);
                 }
 
                 if (tagSuffix) {
@@ -9196,8 +9199,12 @@ try {
             }
         }
     }
+    core.endGroup();
 
+    core.startGroup('Set output');
+    core.info(JSON.stringify(jobMatrix, null, 2));
     core.setOutput('matrix', JSON.stringify(jobMatrix));
+    core.endGroup();
 
 } catch (error) {
     core.setFailed(error.message);
