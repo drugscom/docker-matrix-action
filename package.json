@@ -1,6 +1,6 @@
 {
   "name": "docker-matrix-action",
-  "version": "1.0.2",
+  "version": "1.0.4",
   "description": "Generate job matrix for all Dockerfiles in the project",
   "main": "dist/index.js",
   "scripts": {
