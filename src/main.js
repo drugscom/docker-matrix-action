@@ -9,7 +9,7 @@ const semver = require('semver');
 const gitRefRegex = /^refs\/(:?heads|tags)\//;
 
 function getTags(gitRef) {
-    const latestBranch = core.getInput('latest-branch');
+    const latestBranch = core.getInput('latest-branch').trim();
     const latestRegex = new RegExp(`^refs/heads/${latestBranch}`);
 
     if (gitRef.match(latestRegex)) {
@@ -39,8 +39,8 @@ function getTags(gitRef) {
 
 try {
     const paths = core.getInput('paths');
-    const recursive = core.getInput('recursive');
-    const tagPrefixInput = core.getInput('tag-prefix');
+    const recursive = core.getInput('recursive').trim();
+    const tagPrefixInput = core.getInput('tag-prefix').trim();
 
     includes = [];
     jobMatrix = {'include': includes};
@@ -52,9 +52,9 @@ try {
     core.startGroup('Find targets');
     for (let line of paths.split('\n')) {
         for (let dir of line.split(',')) {
-            let globPath = path.join(dir, 'Dockerfile');
+            let globPath = path.join(dir.trim(), 'Dockerfile');
             if (recursive === 'true') {
-                globPath = path.join(dir, '**/Dockerfile');
+                globPath = path.join(dir.trim(), '**/Dockerfile');
             }
 
             for (let dockerFile of glob.sync(globPath)) {
