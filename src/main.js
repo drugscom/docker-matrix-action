@@ -64,7 +64,7 @@ try {
         }
 
         for (let dockerFile of glob.sync(globPath)) {
-            if (fs.lstatSync(dockerFile).isDirectory()) {
+            if (fs.statSync(dockerFile).isDirectory()) {
                 core.warning(`Ignoring directory "${dockerFile}"`);
                 continue;
             }
