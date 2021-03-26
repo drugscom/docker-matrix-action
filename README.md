@@ -4,6 +4,10 @@ This action generates job matrix for all Dockerfiles in the project.
 
 ## Inputs
 
+### `image-name`
+
+Custom image name. Default to GitHub Container Registry with repository name if empty.
+
 ### `latest-branch`
 
 Name of the branch to associate with the "latest" tag. Default `"master"`.
@@ -15,10 +19,6 @@ The paths where to look for Dockerfiles. Default `"."` (project root).
 ### `recursive`
 
 Search for Dockerfiles recursively. Default `"false"`.
-
-### `tag-prefix`
-
-Custom image tag prefix.
 
 ## Outputs
 

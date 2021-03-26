@@ -1,6 +1,9 @@
 name: 'Dockerfiles matrix generator'
 description: 'Generate job matrix for all Dockerfiles in the project'
 inputs:
+  image-name:
+    description: 'Custom image name'
+    required: false
   latest-branch:
     description: 'Name of the branch to associate with the "latest" tag'
     required: false
@@ -13,9 +16,6 @@ inputs:
     description: 'Search for Dockerfiles recursively'
     required: false
     default: 'false'
-  tag-prefix:
-    description: 'Custom image tag prefix'
-    required: false
 outputs:
   matrix:
     description: 'Job matrix'
