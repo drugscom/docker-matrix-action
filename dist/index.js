@@ -45,7 +45,7 @@ const utils = __importStar(__nccwpck_require__(2682));
 function getIncludes(imageName, paths, recursive, latestBranch) {
     return __awaiter(this, void 0, void 0, function* () {
         const returnVal = [];
-        imageName = imageName ? imageName : ['ghcr.io', github.context.repo.owner, github.context.repo.repo].join('/');
+        imageName = imageName !== null && imageName !== void 0 ? imageName : ['ghcr.io', github.context.repo.owner, github.context.repo.repo].join('/');
         for (const searchPath of paths) {
             const globPattern = path.join(searchPath, recursive ? '**/Dockerfile' : 'Dockerfile');
             const dockerFiles = yield (yield glob.create(globPattern)).glob();
