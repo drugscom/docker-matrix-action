@@ -7,23 +7,28 @@ import * as utils from '@actions/utils'
 
 interface JobInclude {
   'cache-path': string
-  'dockerfile': string
+  dockerfile: string
   'image-name': string
-  'tags': string
+  tags: string
 }
 
 interface JobMatrix {
   include: JobInclude[]
 }
 
-async function getIncludes(imageName: string, paths: string[], recursive: boolean, latestBranch: string): Promise<JobInclude[]> {
-  let returnVal: JobInclude[] = []
+async function getIncludes(
+  imageName: string,
+  paths: string[],
+  recursive: boolean,
+  latestBranch: string
+): Promise<JobInclude[]> {
+  const returnVal: JobInclude[] = []
 
   imageName = imageName ? imageName : ['ghcr.io', github.context.repo.owner, github.context.repo.repo].join('/')
 
   for (const searchPath of paths) {
-    let globPattern = path.join(searchPath, recursive ? '**/Dockerfile' : 'Dockerfile')
-    let dockerFiles = await (await glob.create(globPattern)).glob()
+    const globPattern = path.join(searchPath, recursive ? '**/Dockerfile' : 'Dockerfile')
+    const dockerFiles = await (await glob.create(globPattern)).glob()
 
     for (const dockerFile of dockerFiles) {
       if (!utils.fileExist(dockerFile)) {
@@ -34,15 +39,14 @@ async function getIncludes(imageName: string, paths: string[], recursive: boolea
       core.debug(`Found Dockerfile "${dockerFile}"`)
 
       // Probably cleaner if refactored into a class
-      let tagSuffix = path.relative(searchPath, path.dirname(dockerFile))
-      let tags = tagsClean(tagsAddSuffix(getTags(latestBranch), tagSuffix))
-        .map(tag => [imageName, tag].join(':'))
+      const tagSuffix = path.relative(searchPath, path.dirname(dockerFile))
+      const tags = tagsClean(tagsAddSuffix(getTags(latestBranch), tagSuffix)).map(tag => [imageName, tag].join(':'))
 
       returnVal.push({
         'cache-path': path.join(github.context.repo.owner, github.context.repo.repo, tagSuffix),
-        'dockerfile': dockerFile,
+        dockerfile: dockerFile,
         'image-name': tags[0],
-        'tags': tags.join('\n')
+        tags: tags.join('\n')
       })
     }
   }
@@ -55,7 +59,7 @@ function getTags(latestBranch?: string): string[] {
     return ['latest']
   }
 
-  let gitRef = utils.getGitRef()
+  const gitRef = utils.getGitRef()
   core.debug(`Git ref: ${gitRef}`)
 
   if (!utils.gitEventIsPushTag()) {
@@ -63,7 +67,7 @@ function getTags(latestBranch?: string): string[] {
     return [gitRef]
   }
 
-  let version = semver.parse(gitRef, {loose: true, includePrerelease: true})
+  const version = semver.parse(gitRef, {loose: true, includePrerelease: true})
   if (!version) {
     core.debug(`Tag is not a valid semver, will use git ref "${gitRef}" for Docker image tags`)
     return [gitRef]
@@ -75,11 +79,7 @@ function getTags(latestBranch?: string): string[] {
   }
 
   core.debug(`Version tag detected, will use "${version.version}" for Docker image tags`)
-  return [
-    `${version.major}.${version.minor}.${version.patch}`,
-    `${version.major}.${version.minor}`,
-    `${version.major}`
-  ]
+  return [`${version.major}.${version.minor}.${version.patch}`, `${version.major}.${version.minor}`, `${version.major}`]
 }
 
 function tagsAddSuffix(tags: string[], suffix?: string): string[] {
@@ -91,21 +91,21 @@ function tagsAddSuffix(tags: string[], suffix?: string): string[] {
 }
 
 function tagsClean(tags: string[]): string[] {
-  return tags.map(tag => tag
-    // Replace path separators with dashes
-    .replace(path.sep, '-')
+  return tags.map(tag =>
+    tag
+      // Replace path separators with dashes
+      .replace(path.sep, '-')
 
-    // https://docs.docker.com/engine/reference/commandline/tag/
-    // A tag name must be valid ASCII and may contain lowercase and uppercase letters, digits, underscores, periods and dashes
-    .replace(/[^-a-zA-Z0-9_.]/, '')
+      // https://docs.docker.com/engine/reference/commandline/tag/
+      // A tag name must be valid ASCII and may contain lowercase and uppercase letters, digits, underscores, periods and dashes
+      .replace(/[^-a-zA-Z0-9_.]/, '')
 
-    // https://docs.docker.com/engine/reference/commandline/tag/
-    // A tag name may not start with a period or a dash and may contain a maximum of 128 characters.
-    .replace(/^[.-]+/, '')
-    .substr(0, 128)
+      // https://docs.docker.com/engine/reference/commandline/tag/
+      // A tag name may not start with a period or a dash and may contain a maximum of 128 characters.
+      .replace(/^[.-]+/, '')
+      .substr(0, 128)
   )
 }
-
 
 async function run(): Promise<void> {
   try {
@@ -115,17 +115,16 @@ async function run(): Promise<void> {
     const imageName = utils.getInputAsString('image-name')
 
     core.startGroup('Find targets')
-    let jobMatrix: JobMatrix = {include: await getIncludes(imageName, paths, recursive, latestBranch)}
+    const jobMatrix: JobMatrix = {include: await getIncludes(imageName, paths, recursive, latestBranch)}
     core.endGroup()
 
     core.startGroup('Set output')
     core.setOutput('matrix', JSON.stringify(jobMatrix))
     core.info(JSON.stringify(jobMatrix, null, 2))
     core.endGroup()
-
   } catch (error) {
     core.setFailed(error.message)
   }
 }
 
-run().then()
+void run()

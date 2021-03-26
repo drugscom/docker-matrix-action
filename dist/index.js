@@ -44,11 +44,11 @@ const semver = __importStar(__nccwpck_require__(1383));
 const utils = __importStar(__nccwpck_require__(2682));
 function getIncludes(imageName, paths, recursive, latestBranch) {
     return __awaiter(this, void 0, void 0, function* () {
-        let returnVal = [];
+        const returnVal = [];
         imageName = imageName ? imageName : ['ghcr.io', github.context.repo.owner, github.context.repo.repo].join('/');
         for (const searchPath of paths) {
-            let globPattern = path.join(searchPath, recursive ? '**/Dockerfile' : 'Dockerfile');
-            let dockerFiles = yield (yield glob.create(globPattern)).glob();
+            const globPattern = path.join(searchPath, recursive ? '**/Dockerfile' : 'Dockerfile');
+            const dockerFiles = yield (yield glob.create(globPattern)).glob();
             for (const dockerFile of dockerFiles) {
                 if (!utils.fileExist(dockerFile)) {
                     core.warning(`Ignoring path "${dockerFile}" (not a file)`);
@@ -56,14 +56,13 @@ function getIncludes(imageName, paths, recursive, latestBranch) {
                 }
                 core.debug(`Found Dockerfile "${dockerFile}"`);
                 // Probably cleaner if refactored into a class
-                let tagSuffix = path.relative(searchPath, path.dirname(dockerFile));
-                let tags = tagsClean(tagsAddSuffix(getTags(latestBranch), tagSuffix))
-                    .map(tag => [imageName, tag].join(':'));
+                const tagSuffix = path.relative(searchPath, path.dirname(dockerFile));
+                const tags = tagsClean(tagsAddSuffix(getTags(latestBranch), tagSuffix)).map(tag => [imageName, tag].join(':'));
                 returnVal.push({
                     'cache-path': path.join(github.context.repo.owner, github.context.repo.repo, tagSuffix),
-                    'dockerfile': dockerFile,
+                    dockerfile: dockerFile,
                     'image-name': tags[0],
-                    'tags': tags.join('\n')
+                    tags: tags.join('\n')
                 });
             }
         }
@@ -75,13 +74,13 @@ function getTags(latestBranch) {
         core.debug(`Git branch matches latest branch: "${latestBranch}`);
         return ['latest'];
     }
-    let gitRef = utils.getGitRef();
+    const gitRef = utils.getGitRef();
     core.debug(`Git ref: ${gitRef}`);
     if (!utils.gitEventIsPushTag()) {
         core.debug(`Not pushing a tag, will use git ref "${gitRef}" for Docker image tags`);
         return [gitRef];
     }
-    let version = semver.parse(gitRef, { loose: true, includePrerelease: true });
+    const version = semver.parse(gitRef, { loose: true, includePrerelease: true });
     if (!version) {
         core.debug(`Tag is not a valid semver, will use git ref "${gitRef}" for Docker image tags`);
         return [gitRef];
@@ -91,11 +90,7 @@ function getTags(latestBranch) {
         return [version.version];
     }
     core.debug(`Version tag detected, will use "${version.version}" for Docker image tags`);
-    return [
-        `${version.major}.${version.minor}.${version.patch}`,
-        `${version.major}.${version.minor}`,
-        `${version.major}`
-    ];
+    return [`${version.major}.${version.minor}.${version.patch}`, `${version.major}.${version.minor}`, `${version.major}`];
 }
 function tagsAddSuffix(tags, suffix) {
     if (!suffix) {
@@ -123,7 +118,7 @@ function run() {
             const recursive = utils.getInputAsBool('recursive');
             const imageName = utils.getInputAsString('image-name');
             core.startGroup('Find targets');
-            let jobMatrix = { include: yield getIncludes(imageName, paths, recursive, latestBranch) };
+            const jobMatrix = { include: yield getIncludes(imageName, paths, recursive, latestBranch) };
             core.endGroup();
             core.startGroup('Set output');
             core.setOutput('matrix', JSON.stringify(jobMatrix));
@@ -135,7 +130,7 @@ function run() {
         }
     });
 }
-run().then();
+void run();
 //# sourceMappingURL=main.js.map
 
 /***/ }),
