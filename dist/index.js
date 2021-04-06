@@ -2355,10 +2355,10 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.sleep = exports.safeStat = exports.pathExists = exports.pathIsOk = exports.pathIsLocked = exports.okPath = exports.gitEventIsPushTag = exports.gitEventIsPushHead = exports.gitBranchIsLatest = exports.getPathLock = exports.getInputAsString = exports.getInputAsBool = exports.getInputAsArray = exports.getGitRef = exports.fileExist = exports.directoryExist = exports.gitRefRegex = void 0;
+exports.sleep = exports.setTimer = exports.safeStat = exports.pathExists = exports.pathIsOk = exports.pathIsLocked = exports.okPath = exports.gitEventIsPushTag = exports.gitEventIsPushHead = exports.gitBranchIsLatest = exports.getPathLock = exports.getInputAsString = exports.getInputAsBool = exports.getInputAsArray = exports.getGitRef = exports.fileExist = exports.directoryExist = exports.gitRefRegex = void 0;
 const core = __importStar(__nccwpck_require__(2186));
-const github = __importStar(__nccwpck_require__(5438));
 const fs = __importStar(__nccwpck_require__(5747));
+const github = __importStar(__nccwpck_require__(5438));
 exports.gitRefRegex = /^refs\/(:?heads|tags)\//;
 function directoryExist(path, followSymLinks = true) {
     return (pathExists(path, followSymLinks) &&
@@ -2453,6 +2453,13 @@ function safeStat(path, followSymLinks = true) {
     }
 }
 exports.safeStat = safeStat;
+function setTimer(millis, message) {
+    return setTimeout(function () {
+        core.setFailed(message !== null && message !== void 0 ? message : 'Timer expired, aborting');
+        process.exit(1);
+    }, millis);
+}
+exports.setTimer = setTimer;
 function sleep(millis) {
     const limit = new Date(new Date().getTime() + millis);
     // eslint-disable-next-line no-empty
