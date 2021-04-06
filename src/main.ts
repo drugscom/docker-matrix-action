@@ -24,7 +24,7 @@ async function getIncludes(
 ): Promise<JobInclude[]> {
   const returnVal: JobInclude[] = []
 
-  imageName = imageName ?? ['ghcr.io', github.context.repo.owner, github.context.repo.repo].join('/')
+  imageName = imageName ? imageName : ['ghcr.io', github.context.repo.owner, github.context.repo.repo].join('/')
 
   for (const searchPath of paths) {
     const globPattern = path.join(searchPath, recursive ? '**/Dockerfile' : 'Dockerfile')
