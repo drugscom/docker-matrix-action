@@ -99,15 +99,15 @@ function tagsClean(tags: string[]): string[] {
   return tags.map(tag =>
     tag
       // Replace path separators with dashes
-      .replace(path.sep, '-')
+      .replace(/[\\/]/g, '-')
 
       // https://docs.docker.com/engine/reference/commandline/tag/
       // A tag name must be valid ASCII and may contain lowercase and uppercase letters, digits, underscores, periods and dashes
-      .replace(/[^-a-zA-Z0-9_.]/, '')
+      .replace(/[^-a-zA-Z0-9_.]/g, '')
 
       // https://docs.docker.com/engine/reference/commandline/tag/
       // A tag name may not start with a period or a dash and may contain a maximum of 128 characters.
-      .replace(/^[.-]+/, '')
+      .replace(/^[.-]+/g, '')
       .substr(0, 128)
   )
 }
