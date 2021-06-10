@@ -114,10 +114,10 @@ function tagsClean(tags: string[]): string[] {
 
 async function run(): Promise<void> {
   try {
-    const latestBranch = utils.getInputAsString('latest-branch')
+    const latestBranch = core.getInput('latest-branch')
     const paths = utils.getInputAsArray('paths')
     const recursive = utils.getInputAsBool('recursive')
-    const imageName = utils.getInputAsString('image-name')
+    const imageName = core.getInput('image-name')
 
     core.startGroup('Find targets')
     const jobMatrix: JobMatrix = {include: await getIncludes(imageName, paths, recursive, latestBranch)}
