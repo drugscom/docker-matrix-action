@@ -28,14 +28,9 @@ async function getIncludes(
 
   for (const searchPath of paths) {
     const globPattern = path.join(searchPath, recursive ? '**/Dockerfile' : 'Dockerfile')
-    const dockerFiles = await (await glob.create(globPattern)).glob()
+    const dockerFiles = await (await glob.create(globPattern, {matchDirectories: false})).glob()
 
     for (let dockerFile of dockerFiles) {
-      if (!utils.fileExist(dockerFile)) {
-        core.warning(`Ignoring path "${dockerFile}" (not a file)`)
-        continue
-      }
-
       dockerFile = path.relative(
         process.env['GITHUB_WORKSPACE'] ? process.env['GITHUB_WORKSPACE'] : process.cwd(),
         dockerFile
