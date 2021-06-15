@@ -11,7 +11,7 @@ async function run(): Promise<void> {
     const dockerFiles: string[] = []
 
     for (const searchPath of paths) {
-      const files = await (await glob.create(searchPath, {matchDirectories: false})).glob()
+      const files = await (await glob.create(searchPath, {matchDirectories: false, implicitDescendants: false})).glob()
 
       for (let dockerFile of files) {
         dockerFile = path.relative(

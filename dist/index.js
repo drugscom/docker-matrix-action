@@ -46,7 +46,7 @@ function run() {
             core.startGroup('Find targets');
             const dockerFiles = [];
             for (const searchPath of paths) {
-                const files = yield (yield glob.create(searchPath, { matchDirectories: false })).glob();
+                const files = yield (yield glob.create(searchPath, { matchDirectories: false, implicitDescendants: false })).glob();
                 for (let dockerFile of files) {
                     dockerFile = path.relative(process.env['GITHUB_WORKSPACE'] ? process.env['GITHUB_WORKSPACE'] : process.cwd(), dockerFile);
                     core.debug(`Found Dockerfile "${dockerFile}"`);
