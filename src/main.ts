@@ -28,7 +28,7 @@ async function run(): Promise<void> {
 
     core.startGroup('Set output')
     core.setOutput('dockerfile', JSON.stringify(dockerFiles))
-    core.info(`Dockerfile list: ${dockerFiles}`)
+    core.info(`Dockerfile list: ${dockerFiles.join(', ')}`)
     core.endGroup()
   } catch (error) {
     core.setFailed(error.message)

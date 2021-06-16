@@ -56,7 +56,7 @@ function run() {
             core.endGroup();
             core.startGroup('Set output');
             core.setOutput('dockerfile', JSON.stringify(dockerFiles));
-            core.info(`Dockerfile list: ${dockerFiles}`);
+            core.info(`Dockerfile list: ${dockerFiles.join(', ')}`);
             core.endGroup();
         }
         catch (error) {
