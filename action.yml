@@ -5,6 +5,9 @@ inputs:
     description: 'Paths where to look for Dockerfiles'
     required: false
     default: '**/Dockerfile'
+  suffix-replace:
+    description: 'Replace pattern in tag suffix'
+    required: false
 outputs:
   matrix:
     description: 'Job matrix'

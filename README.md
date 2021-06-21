@@ -8,6 +8,10 @@ This action generates job matrix for all Dockerfiles in the project.
 
 The paths where to look for Dockerfiles. Default `"**/Dockerfile"`.
 
+### `suffix-replace`
+
+Replace pattern in tag suffix.
+
 ## Outputs
 
 ### `dockerfile`
