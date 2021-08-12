@@ -68,9 +68,6 @@ function run() {
                             suffix = suffix.replace(new RegExp(regex), '');
                         }
                     }
-                    if (suffix !== '') {
-                        suffix = `-${suffix}`;
-                    }
                     core.debug(`Docker tag suffix: ${suffix}`);
                     dockerFiles.push({
                         path: dockerFile,

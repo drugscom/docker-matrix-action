@@ -44,10 +44,6 @@ async function run(): Promise<void> {
           }
         }
 
-        if (suffix !== '') {
-          suffix = `-${suffix}`
-        }
-
         core.debug(`Docker tag suffix: ${suffix}`)
 
         dockerFiles.push({
