@@ -51,7 +51,13 @@ function run() {
                 for (let dockerFile of files) {
                     dockerFile = path.relative(process.env['GITHUB_WORKSPACE'] ? process.env['GITHUB_WORKSPACE'] : process.cwd(), dockerFile);
                     core.debug(`Found Dockerfile "${dockerFile}"`);
-                    let suffix = dockerFile.replace(/Dockerfile(?:-([^/]+))?$/, '$1');
+                    let suffix;
+                    if (dockerFile.match(/Dockerfile-[^/]+$/)) {
+                        suffix = dockerFile.replace(/Dockerfile-([^/]+)$/, '$1');
+                    }
+                    else {
+                        suffix = dockerFile.replace(/\/?Dockerfile$/, '');
+                    }
                     for (const regex of suffixReplace) {
                         if (regex.startsWith('/')) {
                             const [searchPattern, replaceValue, regexFlags] = regex.substring(1).split('/');

@@ -27,7 +27,12 @@ async function run(): Promise<void> {
 
         core.debug(`Found Dockerfile "${dockerFile}"`)
 
-        let suffix = dockerFile.replace(/Dockerfile(?:-([^/]+))?$/, '$1')
+        let suffix
+        if (dockerFile.match(/Dockerfile-[^/]+$/)) {
+          suffix = dockerFile.replace(/Dockerfile-([^/]+)$/, '$1')
+        } else {
+          suffix = dockerFile.replace(/\/?Dockerfile$/, '')
+        }
 
         for (const regex of suffixReplace) {
           if (regex.startsWith('/')) {
