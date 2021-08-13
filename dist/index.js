@@ -68,6 +68,9 @@ function run() {
                         }
                     }
                     suffix = suffix.replace(/\//g, '-');
+                    if (suffix) {
+                        suffix = `-${suffix}`;
+                    }
                     core.debug(`Docker tag suffix: ${suffix}`);
                     dockerFiles.push({
                         path: dockerFile,

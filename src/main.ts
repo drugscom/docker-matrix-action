@@ -45,6 +45,10 @@ async function run(): Promise<void> {
 
         suffix = suffix.replace(/\//g, '-')
 
+        if (suffix) {
+          suffix = `-${suffix}`
+        }
+
         core.debug(`Docker tag suffix: ${suffix}`)
 
         dockerFiles.push({
